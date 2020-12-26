@@ -7,7 +7,18 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 
+import pymongo
 
 class WsMoneycontrolPipeline:
+
+    def __init__(self):
+        self.conn = pymongo.MongoClient(
+            'localhost',
+            27017
+        )
+        db = self.conn['stock']
+        self.collection = db['stocks_tb']
+
     def process_item(self, item, spider):
+        self.collection.insert(item)
         return item
