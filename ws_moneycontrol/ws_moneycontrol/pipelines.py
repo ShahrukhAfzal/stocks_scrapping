@@ -18,12 +18,13 @@ class StockMarketPipeline:
             27017
         )
         db = self.conn['stock']
-        self.bombay_stocks_tb = db['bombay_stocks_tb']
-        self.national_stocks_tb = db['national_stocks_tb']
+        self.stocks_tb = db['stocks_tb']
+        self.live_market_tb = db['live_market_tb']
 
     def process_item(self, item, spider):
-        if 'bombay' in item.get('market').lower():
-            self.bombay_stocks_tb.insert(item)
-        elif 'national' in item.get('market').lower():
-            self.national_stocks_tb.insert(item)
+        entity = item.pop('entity')
+        if entity == 'stock':
+            self.stocks_tb.insert(item)
+        elif entity == 'live_market':
+            self.live_market_tb.insert(item)
         return item
