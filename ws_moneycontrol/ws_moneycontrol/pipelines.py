@@ -9,7 +9,8 @@ from itemadapter import ItemAdapter
 
 import pymongo
 
-class WsMoneycontrolPipeline:
+
+class StockMarketPipeline:
 
     def __init__(self):
         self.conn = pymongo.MongoClient(
@@ -17,8 +18,12 @@ class WsMoneycontrolPipeline:
             27017
         )
         db = self.conn['stock']
-        self.collection = db['stocks_tb']
+        self.bombay_stocks_tb = db['bombay_stocks_tb']
+        self.national_stocks_tb = db['national_stocks_tb']
 
     def process_item(self, item, spider):
-        self.collection.insert(item)
+        if 'bombay' in item.get('market').lower():
+            self.bombay_stocks_tb.insert(item)
+        elif 'national' in item.get('market').lower():
+            self.national_stocks_tb.insert(item)
         return item
