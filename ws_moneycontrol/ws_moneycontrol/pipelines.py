@@ -24,7 +24,6 @@ class StockMarketPipeline:
 
     def process_item(self, item, spider):
         entity = item.pop('entity')
-        print(entity)
         if entity == 'stock':
             self.stocks_tb.insert(item)
         elif entity == 'live_market':

@@ -13,9 +13,6 @@ class StockMarketSpider(scrapy.Spider):
         for url in self.global_stocks_urls:
             yield scrapy.Request(url, callback=self.parse_2)
 
-        for url in self.indian_stocks_urls:
-            yield scrapy.Request(url, callback=self.get_all_live_market)
-
     custom_settings = {
         'ITEM_PIPELINES': {
             'ws_moneycontrol.pipelines.StockMarketPipeline': 200
@@ -70,9 +67,6 @@ class StockMarketSpider(scrapy.Spider):
             except:
                 pass
 
-        url = 'https://www.moneycontrol.com/markets/indian-indices/'
-        yield response.follow(url, callback=self.get_all_live_market)
-
     def get_all_bse(self, response):
         table = response.xpath('//*[(@id = "nsebse_1")]//*[@class="responsive"]//tbody//tr')
         for row in table:
@@ -113,11 +107,7 @@ class StockMarketSpider(scrapy.Spider):
             }
             yield data_dict
 
-    def get_all_live_market(self, response):
-        #Live Bombay Stock Exchange
-        print("here")
-        import pdb;
-        pdb.set_trace()
+		#Live Bombay Stock Exchange
         table = response.xpath('//*[(@id = "nsebse_3")]//*[@class="responsive"]/tbody/tr')
         for row in table:
             data = row.xpath('td//text()').extract()
