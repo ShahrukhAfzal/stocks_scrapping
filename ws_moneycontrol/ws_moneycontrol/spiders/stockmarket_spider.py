@@ -3,9 +3,18 @@ from datetime import datetime
 
 class StockMarketSpider(scrapy.Spider):
     name = 'stocks'
-    start_urls = [
-        'https://www.moneycontrol.com/markets/indian-indices/'
-    ]
+    indian_stocks_urls = ['https://www.moneycontrol.com/markets/indian-indices/']
+    global_stocks_urls = ['https://www.moneycontrol.com/markets/global-indices/']
+
+    def start_requests(self):
+        for url in self.indian_stocks_urls:
+            yield scrapy.Request(url, callback=self.parse_1)
+
+        for url in self.global_stocks_urls:
+            yield scrapy.Request(url, callback=self.parse_2)
+
+        for url in self.indian_stocks_urls:
+            yield scrapy.Request(url, callback=self.get_all_live_market)
 
     custom_settings = {
         'ITEM_PIPELINES': {
@@ -13,7 +22,35 @@ class StockMarketSpider(scrapy.Spider):
         }
     }
 
-    def parse(self, response, **kwargs):
+    @staticmethod
+    def strip_text(string, index=-1):
+        return string.split('\n')[index].strip()
+
+    def parse_2(self, response, **kwargs):
+        data = response.xpath('//*[@class="mctable1 n18_res_table responsive tbl_scroll_resp"]//tbody//tr')
+        current_market = ""
+        for each in data:
+            data = each.xpath('td//text()').extract()
+            if len(data) < 11:
+                current_market = data[0]
+            else:
+                data_dict = {
+                    "name": self.strip_text(data[0]),
+                    "date": data[1],
+                    "current_value": data[2],
+                    "change": data[3],
+                    "percent_change": data[6],
+                    "open": self.strip_text(data[9], index=0),
+                    "prev_close": data[10],
+                    "high": self.strip_text(data[11], index=0),
+                    "low": data[12],
+                    "market": current_market,
+                    'entity': 'global_market'
+                }
+
+                yield data_dict
+
+    def parse_1(self, response, **kwargs):
         self.current_time = datetime.now()
         return self.parse_pages(response)
 
@@ -35,7 +72,6 @@ class StockMarketSpider(scrapy.Spider):
 
         url = 'https://www.moneycontrol.com/markets/indian-indices/'
         yield response.follow(url, callback=self.get_all_live_market)
-
 
     def get_all_bse(self, response):
         table = response.xpath('//*[(@id = "nsebse_1")]//*[@class="responsive"]//tbody//tr')
@@ -79,6 +115,9 @@ class StockMarketSpider(scrapy.Spider):
 
     def get_all_live_market(self, response):
         #Live Bombay Stock Exchange
+        print("here")
+        import pdb;
+        pdb.set_trace()
         table = response.xpath('//*[(@id = "nsebse_3")]//*[@class="responsive"]/tbody/tr')
         for row in table:
             data = row.xpath('td//text()').extract()
@@ -114,5 +153,4 @@ class StockMarketSpider(scrapy.Spider):
                 'entity': 'live_market',
                 'updated_on': self.current_time,
             }
-
             yield data_dict

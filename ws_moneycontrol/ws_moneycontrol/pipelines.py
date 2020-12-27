@@ -20,11 +20,16 @@ class StockMarketPipeline:
         db = self.conn['stock']
         self.stocks_tb = db['stocks_tb']
         self.live_market_tb = db['live_market_tb']
+        self.global_market_tb = db['global_market_tb']
 
     def process_item(self, item, spider):
         entity = item.pop('entity')
+        print(entity)
         if entity == 'stock':
             self.stocks_tb.insert(item)
         elif entity == 'live_market':
             self.live_market_tb.insert(item)
+        elif entity == 'global_market':
+            self.global_market_tb.insert(item)
+
         return item
