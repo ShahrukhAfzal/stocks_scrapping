@@ -1,7 +1,7 @@
 import scrapy
 from datetime import datetime
 
-class StockMarketSpider(scrapy.Spider):
+class GlobalStockMarketSpider(scrapy.Spider):
     name = 'global_stocks'
     start_urls = ['https://www.moneycontrol.com/markets/global-indices/']
 
@@ -37,3 +37,4 @@ class StockMarketSpider(scrapy.Spider):
                     'entity': 'global_market'
                 }
                 yield data_dict
+
