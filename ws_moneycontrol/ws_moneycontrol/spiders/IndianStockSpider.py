@@ -10,6 +10,10 @@ class IndianStockMarketSpider(scrapy.Spider):
         }
     }
 
+    @staticmethod
+    def strip_text(string, index=-1):
+        return string.split('\n')[index].strip()
+
     def parse(self, response):
         self.current_time = datetime.now()
         #Bombay Stock Exchange
