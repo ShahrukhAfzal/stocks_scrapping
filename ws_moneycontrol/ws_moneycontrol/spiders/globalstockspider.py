@@ -24,17 +24,18 @@ class GlobalStockMarketSpider(scrapy.Spider):
                 current_market = data[0]
             else:
                 data_dict = {
-                    "name": self.strip_text(data[0]),
-                    "date": data[1],
-                    "current_value": data[2],
-                    "change": data[3],
-                    "percent_change": data[6],
-                    "open": self.strip_text(data[9], index=0),
-                    "prev_close": data[10],
-                    "high": self.strip_text(data[11], index=0),
-                    "low": data[12],
-                    "market": current_market,
-                    'entity': 'global_market'
+                    'name': self.strip_text(data[0]),
+                    'date': data[1],
+                    'current_value': data[2],
+                    'change': data[3],
+                    'percent_change': data[6],
+                    'open': self.strip_text(data[9], index=0),
+                    'prev_close': data[10],
+                    'high': self.strip_text(data[11], index=0),
+                    'low': data[12],
+                    'market': current_market,
+                    'entity': 'global_market',
+                    'updated_on': self.current_time,
                 }
                 yield data_dict
 
