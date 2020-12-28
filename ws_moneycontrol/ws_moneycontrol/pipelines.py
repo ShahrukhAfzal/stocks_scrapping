@@ -45,3 +45,18 @@ class GlobalStockMarketPipeline:
             self.global_market_tb.insert(item)
 
         return item
+
+
+class TopPerformingFundsPipeline:
+    def __init__(self):
+        self.conn = pymongo.MongoClient(
+            'localhost',
+            27017
+        )
+        db = self.conn['stock']
+        self.top_performing_funds_tb = db['top_performing_funds_tb']
+
+    def process_item(self, item, spider):
+        self.top_performing_funds_tb.insert(item)
+
+        return item
