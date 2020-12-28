@@ -29,3 +29,8 @@ $ scrapy crawl indian_stocks
 ```
 $ scrapy crawl global_stocks
 ```
+
+### scrap top performers data in mutual fund
+```
+$ scrapy crawl mutual_fund
+```
