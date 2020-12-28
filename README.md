@@ -13,12 +13,12 @@ MongoDB setup [watch this video](https://www.youtube.com/watch?v=djfnjtYB2co&lis
 ```
 $ cd ws_moneycontrol/ws_moneycontrol
 ```
-## scrap indian stocks market data
+### scrap indian stocks market data
 ```
 $ scrapy crawl indian_stocks
 ```
 
-## scrap global stocks market data
+### scrap global stocks market data
 ```
 $ scrapy crawl global_stocks
 ```
