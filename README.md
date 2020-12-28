@@ -20,12 +20,12 @@ $ pip3 install -r requirements.txt
 ```
 $ cd ws_moneycontrol/ws_moneycontrol
 ```
-### scrap indian stocks market data
+### scrap indian stock market data
 ```
 $ scrapy crawl indian_stocks
 ```
 
-### scrap global stocks market data
+### scrap international stock market data
 ```
 $ scrapy crawl global_stocks
 ```
