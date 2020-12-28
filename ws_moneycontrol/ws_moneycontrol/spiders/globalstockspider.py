@@ -18,6 +18,7 @@ class GlobalStockMarketSpider(scrapy.Spider):
     def parse(self, response, **kwargs):
         data = response.xpath('//*[@class="mctable1 n18_res_table responsive tbl_scroll_resp"]//tbody//tr')
         current_market = ""
+        self.current_time = datetime.now()
         for each in data:
             data = each.xpath('td//text()').extract()
             if len(data) < 11:
